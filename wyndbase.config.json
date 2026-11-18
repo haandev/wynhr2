@@ -1,0 +1,9 @@
+{
+  "model": "wynhr.json",
+  "sources": [
+    "."
+  ],
+  "types": "wynhr.wql.gen.d.ts",
+  "url": "wyndbase://dev.wyndbase.dev/wynhr",
+  "revision": "HGxsM5uKwQVrraFGBhK6EpPRimd-C7BHgxMHHo516v0"
+}
