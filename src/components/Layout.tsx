@@ -62,9 +62,6 @@ export function Layout() {
               // Single logout: ends this app's tokens and the identity provider's session
               // (full-page redirect), so the next sign-in asks for credentials again.
               onClick={() => {
-                // The hosted sign-in page currently survives the SSO logout, so the next
-                // sign-in also asks for fresh credentials (max_age=0); see Login.tsx.
-                try { localStorage.setItem('wynhr.forceLogin', '1') } catch { /* storage blocked */ }
                 wyndbase.auth.logout({ scope: 'sso', postLogoutRedirectUri: `${window.location.origin}/login` })
               }}
             >
