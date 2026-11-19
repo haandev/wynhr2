@@ -57,7 +57,12 @@ export function Layout() {
               <Avatar name={me?.name} size={32} />
               <span>{me?.name ?? '…'}</span>
             </button>
-            <button className="btn ghost sm" onClick={() => wyndbase.auth.logout({ scope: 'app' }).then(() => navigate('/login'))}>
+            <button
+              className="btn ghost sm"
+              // Single logout: ends this app's tokens and the identity provider's session
+              // (full-page redirect), so the next sign-in asks for credentials again.
+              onClick={() => wyndbase.auth.logout({ scope: 'sso', postLogoutRedirectUri: `${window.location.origin}/login` })}
+            >
               Sign out
             </button>
           </div>
