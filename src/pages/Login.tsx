@@ -35,7 +35,18 @@ export function Login() {
         <p className="muted">People, time off and org structure in one place.</p>
         {phase === 'working' && <p className="muted">Signing you in…</p>}
         {phase !== 'working' && (
-          <button className="btn primary wide" onClick={() => session.authorize({ redirect: true })}>
+          <button
+            className="btn primary wide"
+            onClick={() => {
+              let force = false
+              try {
+                force = localStorage.getItem('wynhr.forceLogin') === '1'
+                localStorage.removeItem('wynhr.forceLogin')
+              } catch { /* storage blocked */ }
+              // After a sign-out, max_age=0 makes the identity provider ask for credentials again.
+              session.authorize(force ? { redirect: true, maxAge: 0 } : { redirect: true })
+            }}
+          >
             Sign in with Wyndbase
           </button>
         )}

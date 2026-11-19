@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { wyndbase } from '../wyndbase'
-import { fmtDate, today, useAction, useMe } from '../lib/data'
+import { fmtDate, today, useAction, useMe, params as clean } from '../lib/data'
 import { Avatar, Card, ErrorNote, Field, Modal, PageHead } from '../components/ui'
 
 type Person = { _id: string; name: string | null; jobTitle: string | null; managerId: string | null; department: string | null; status: string | null; userId: string | null }
@@ -145,13 +145,13 @@ function DeptModal({ dep, people, onClose }: { dep: { _id: string; name: string 
             disabled={busy}
             onClick={async () => {
               const r = await run(() =>
-                wyndbase.mutation.org.changeDepartment({
+                wyndbase.mutation.org.changeDepartment(clean({
                   departmentId: dep._id,
                   effectiveDate: date,
                   name: name !== dep.name ? name : null,
                   headUserId: head || null,
                   active: active === '' ? null : active === 'yes',
-                }),
+                })),
               )
               if (r) onClose()
             }}

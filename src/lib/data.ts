@@ -111,3 +111,12 @@ export function workingHours(start: string, end: string, holidays: { date: strin
   }
   return hours
 }
+
+/**
+ * Drops null/undefined keys from named-query parameters. A typed parameter without a
+ * default is refused when sent as null ("expected boolean, received null"), although the
+ * generated type allows null — leaving the key out is what "not given" means.
+ */
+export function params<T extends Record<string, unknown>>(p: T): T {
+  return Object.fromEntries(Object.entries(p).filter(([, v]) => v !== null && v !== undefined)) as T
+}

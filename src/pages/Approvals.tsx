@@ -108,7 +108,15 @@ export function Approvals() {
               <button
                 className={`btn ${deciding.decision === 'approved' ? 'primary' : 'danger'}`}
                 onClick={async () => {
-                  await run(() => wyndbase.mutation.pto.decideRequest({ requestId: deciding.id, decision: deciding.decision, note: note || null, override: isHr ? override : null }))
+                  // `override` is a boolean parameter: send it only for HR, never as null.
+                  await run(() =>
+                    wyndbase.mutation.pto.decideRequest({
+                      requestId: deciding.id,
+                      decision: deciding.decision,
+                      ...(note ? { note } : {}),
+                      ...(isHr ? { override } : {}),
+                    }),
+                  )
                   setDeciding(null)
                 }}
               >

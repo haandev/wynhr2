@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { wyndbase } from '../wyndbase'
-import { fmtDate, fmtDays, fmtHours, thisYear, today, useAction, workingHours } from '../lib/data'
+import { fmtDate, fmtDays, fmtHours, thisYear, today, useAction, workingHours, params as clean } from '../lib/data'
 import { ErrorNote, Field, Modal, Pill } from './ui'
 
 export function Balances({ year = thisYear() }: { year?: number }) {
@@ -62,14 +62,14 @@ export function RequestTimeOff({ onClose, country }: { onClose: () => void; coun
 
   const submit = async () => {
     const r = await run(() =>
-      wyndbase.mutation.pto.submitRequest({
+      wyndbase.mutation.pto.submitRequest(clean({
         ptoTypeId: type?._id,
         startDate: start,
         endDate: partial ? start : end,
         hours,
         partialDay: partial,
         note: note || null,
-      }),
+      })),
     )
     if (r) onClose()
   }

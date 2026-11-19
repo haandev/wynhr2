@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import { wyndbase } from '../wyndbase'
-import { fmtDate, fmtHours, fmtMoney, label, thisYear, today, useAction, useMe } from '../lib/data'
+import { fmtDate, fmtHours, fmtMoney, label, thisYear, today, useAction, useMe, params as clean } from '../lib/data'
 import { Avatar, Card, Empty, ErrorNote, Field, Modal, Pill } from '../components/ui'
 
 type Tab = 'job' | 'personal' | 'history' | 'pay' | 'timeoff' | 'audit'
@@ -419,8 +419,8 @@ function ChangeModal({ mode, e, onClose }: { mode: 'change' | 'correct'; e: Emp;
     const params = { employeeId: e._id, reason, ...changed, fte }
     const r =
       mode === 'change'
-        ? await run(() => wyndbase.mutation.hr.recordChange({ effectiveDate: date, ...params }))
-        : await run(() => wyndbase.mutation.hr.correctRecord({ periodDate: date, ...params }))
+        ? await run(() => wyndbase.mutation.hr.recordChange(clean({ effectiveDate: date, ...params })))
+        : await run(() => wyndbase.mutation.hr.correctRecord(clean({ periodDate: date, ...params })))
     if (r) onClose()
   }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { wyndbase } from '../wyndbase'
-import { fmtDate, fmtHours, label, thisYear, today, useAction, useMe } from '../lib/data'
+import { fmtDate, fmtHours, label, thisYear, today, useAction, useMe, params as clean } from '../lib/data'
 import { Card, Empty, ErrorNote, Field, Modal, PageHead, Pill } from '../components/ui'
 
 type Tab = 'policies' | 'periods' | 'holidays'
@@ -133,14 +133,14 @@ function PolicyModal({ p, onClose }: { p: Policy; onClose: () => void }) {
             disabled={busy}
             onClick={async () => {
               const r = await run(() =>
-                wyndbase.mutation.pto.changePolicy({
+                wyndbase.mutation.pto.changePolicy(clean({
                   policyId: p._id,
                   effectiveDate: date,
                   accrualHoursPerPeriod: num(String(rate), p.accrualHoursPerPeriod),
                   annualCapHours: num(String(cap), p.annualCapHours),
                   maxCarryoverHours: num(String(carry), p.maxCarryoverHours),
                   accrueDuringLeave: leave !== !!p.accrueDuringLeave ? leave : null,
-                }),
+                })),
               )
               if (r) onClose()
             }}

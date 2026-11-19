@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { wyndbase } from '../wyndbase'
-import { label, today, useAction } from '../lib/data'
+import { label, today, useAction, params as clean } from '../lib/data'
 import { Card, ErrorNote, Field, PageHead } from '../components/ui'
 
 export function Hire() {
@@ -26,7 +26,7 @@ export function Hire() {
 
   const submit = async () => {
     const r = await run(async () => {
-      const res = (await wyndbase.mutation.hr.hireEmployee({
+      const res = (await wyndbase.mutation.hr.hireEmployee(clean({
         username: v.username || v.workEmail.split('@')[0],
         givenName: v.givenName, familyName: v.familyName, preferredName: v.preferredName || null,
         workEmail: v.workEmail, employeeNumber: v.employeeNumber, hireDate: v.hireDate,
@@ -34,7 +34,7 @@ export function Hire() {
         jobTitle: v.jobTitle, legalEntityId: loc?.legalEntityId, workLocationId: v.workLocationId,
         departmentId: v.departmentId, productTeamId: v.productTeamId || null, managerId: v.managerId || null,
         costCenterId: v.costCenterId, salary: parseFloat(v.salary), currency: v.currency,
-      })) as { _id: string | null; userId: string | null }[]
+      }))) as { _id: string | null; userId: string | null }[]
       const hired = res[0]
       if (v.personalEmail && hired?.userId) await wyndbase.mutation.hr.addPersonalEmail({ userId: hired.userId, email: v.personalEmail })
       // Give the new hire every active PTO policy of their country group, from the hire date.
